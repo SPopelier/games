@@ -8,4 +8,8 @@ public class Cell {
     public String getRepresentation() {
         return this.representation;
     }
+
+    public boolean isEmpty() {
+        return this.representation.equals(" ");
+    }
 }

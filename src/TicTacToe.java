@@ -10,9 +10,6 @@ public class TicTacToe {
     //on accède à la class Board
     public Board board;
 
-//    //on initialise Cell
-//    String Cell = null;
-
     //on accède à la class Player
     public Player player;
 
@@ -20,6 +17,7 @@ public class TicTacToe {
     public TicTacToe() {
         this.menu = new Menu();
         this.board = new Board();
+        player= new Player();
     }
 
     //on délègue la fonction display à la class Board
@@ -27,13 +25,31 @@ public class TicTacToe {
         this.board.display();
     }
 
+    public String ChooseSymbol() {
+        String[] symbols = {"X", "O"};
+
+        String optionSymbol = (String)JOptionPane.showInputDialog(
+                null,
+                "Choose your symbol, X or O ?",
+                "Choose Symbol",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                symbols,
+                symbols[0]);
+        if (optionSymbol != null) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Your symbol is " + optionSymbol,
+                    "Choose Symbol",
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
+        return optionSymbol;
+    }
     //méthode pour retourner une paire de valeurs pour désigner une case, et s'assurer que les inputs sont valides
     public int[] getMoveFromPlayer() {
 
         // On creer une boîte de dialogue
         JOptionPane pane = new JOptionPane();
-
-        int choice = -1;
 
         //on apel askNumber pour boucler et vérifier la validité du choice
         int col,row;
@@ -43,17 +59,6 @@ public class TicTacToe {
             col = askNumber(pane, "column");
             row = askNumber(pane, "row");
 
-            // On demande a l'utilisateur
-//            String userInput = menu.requestText("Please enter a whole number in " + col + "and " + row + ": ");
-//            choice = Integer.parseInt(userInput);
-//            menu.displayText("You have chosen " + choice + " .");
-
-            // On valide le choix
-//            if (checkNumber(col, row)) {
-//                menu.displayText("This box is empty. You have played !");
-//            } else {
-//                menu.displayText("This box is not empty ! Replay !");
-//            }
         } while (!checkNumber(col, row));
         // Fin tant que
         int[] result = new int[2];
@@ -77,10 +82,12 @@ public class TicTacToe {
                 menu.displayText("You have chosen " + choice + " .");
                 if (choice >= 0 && choice <= 2) {
                     isInvalid = false;
+                } else {
+                    menu.showError("Please enter a number between 0 and 2");
                 }
 
-            } catch (InputMismatchException e) {
-                menu.requestText("Please enter a number ! ");
+            } catch (NumberFormatException e) {
+                menu.showError("Please enter a number ! ");
             }
         }
         return choice;
@@ -88,17 +95,12 @@ public class TicTacToe {
 
     // Verifier si l'emplacement est libre
     private boolean checkNumber(int col, int row) {
-        return true;
-//        int searchElement = 0;
-//        boolean cellIsNotEmpty = true;
-//        while (cellIsNotEmpty) { // if dans la boucle c'est ok ?????
-//            if (choice == searchElement) {
-//                menu.displayText("This box is not empty. You have played !");
-//            }
-//            if (choice != searchElement) {
-//                menu.displayText("This box is empty ! Replay !");
-//            }
-//        }
-//        return choice;
+        Cell cell = this.board.getCell(col, row);
+        return cell.isEmpty();
+    }
+
+    //récupère si l'emplacement est libre et remplace par optionSymbol
+    private void setOwner(int col, int row, String currentPlayer) {
+
     }
 }
