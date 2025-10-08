@@ -15,6 +15,8 @@ public class Board {
         return board[i][j];
     }
 
+    public Cell setCell(int i, int j) {return board[i][j];}
+
     public void display() {
         for (int i = 0; i< board.length; i++) {
             for (int j = 0; j< board[i].length; j++) {

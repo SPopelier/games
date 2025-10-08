@@ -1,19 +1,23 @@
 import javax.swing.*;
 import java.util.InputMismatchException;
 
+public class
 
-public class TicTacToe {
+TicTacToe {
 
-    //On accède a la classe Menu
+    //instance de la Class Menu pour gérer les interactions
     private Menu menu;
 
-    //on accède à la class Board
+    //instance de la Class Board pour gérer le GameBoard
     public Board board;
 
-    //on accède à la class Player
+    //instance de la Class Player currentPlayer
     public Player player;
 
-    //on construit le board
+    //stockage de la variable optionSybmol
+    String optionSymbol;
+
+    //on construit le board(Menu, GameBoard)
     public TicTacToe() {
         this.menu = new Menu();
         this.board = new Board();
@@ -51,7 +55,7 @@ public class TicTacToe {
         // On creer une boîte de dialogue
         JOptionPane pane = new JOptionPane();
 
-        //on apel askNumber pour boucler et vérifier la validité du choice
+        //variable pour stocker les coordonnées
         int col,row;
 
         // Tant que l'input est invalide
@@ -100,7 +104,58 @@ public class TicTacToe {
     }
 
     //récupère si l'emplacement est libre et remplace par optionSymbol
-    private void setOwner(int col, int row, String currentPlayer) {
+    public void setOwner(int col, int row, String currentPlayer) {
+        Cell cell = this.board.getCell(col, row);
+        if (cell.isEmpty()) {
+            cell.setRepresentation(currentPlayer);
+        } else {
+            menu.displayText("This cell is already occupied!");
+        }
+    }
 
+    public void play() {
+
+        boolean hasEmpty = true;
+
+        // demander le symbole une seule fois
+        optionSymbol = ChooseSymbol();
+        if (optionSymbol == null) {
+            menu.displayText("Please choose your symbol, X or O ?");
+            return;
+        }
+
+        while(hasEmpty) {
+            //demander le coup du joueur
+            int[] moveFromPlayer = getMoveFromPlayer();
+
+            if (moveFromPlayer == null) {
+                menu.displayText("Please choose your symbol, X or O ?");
+            }
+            int col = moveFromPlayer[0];
+            int row = moveFromPlayer[1];
+
+            //placer le symbol
+            setOwner(col, row, optionSymbol);
+
+            //affiche le []
+            display();
+
+            //vérifier si la grille contient encore une cellule vide
+            hasEmpty = false;
+            for (int i = 0; i < board.size; i++) {
+                for (int j = 0; i < board.size; j++) {
+                    if (board.getCell(i, j).isEmpty()) {
+                        hasEmpty = true;
+                        break;
+                    }
+                    if (hasEmpty) break;
+                }
+                // 5️⃣ si la grille n’est pas pleine, changer le symbole pour le tour suivant
+                //if (hasEmpty) {
+                //   optionSymbol = optionSymbol.equals("X") ? "O" : "X";
+                //}
+            }
+            menu.displayText("All cells are now filled!");
+        }
     }
 }
