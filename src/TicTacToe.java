@@ -1,23 +1,19 @@
-import javax.swing.*;
 import java.security.SecureRandom;
 import java.util.Objects;
 
 
-public class
-
-TicTacToe {
+public class TicTacToe {
 
     //instance de la Class Menu pour gérer les interactions
-    private final Menu menu;
-
-    //instance de la Class Board pour gérer le GameBoard
-    public Board board;
+    private final InteractionUtilisateur interactionUtilisateur;
 
     //instance de la Class Player pour gérer currentPlayer
     public Player player;
 
-    //instance de la class View pour gérer l'affichage
-    private TicTacToe view;
+    //instance de la class View
+    public View view;
+
+    public Cell[][] board;
 
     //stockage de la variable optionSybmol
     String optionSymbol;
@@ -25,14 +21,29 @@ TicTacToe {
     //stockage de la variabe type
     String type;
 
+    //stockage du boolean started
     public boolean started = false;
 
 
     //on construit le board(Menu, GameBoard)
     public TicTacToe() {
-        this.menu = new Menu();
-        this.board = new Board();
-        player = new Player(optionSymbol, type);
+        this.interactionUtilisateur = new InteractionUtilisateur();
+        this.initialiseBoard();
+        this.player = new Player(optionSymbol, type);
+        this.view = new View();
+    }
+
+    private void initialiseBoard() {
+        board =  new Cell[3][3];
+        for(int i = 0; i < 3; i++) {
+            for(int j = 0; j < 3; j++) {
+                board[i][j] = new Cell();
+            }
+        }
+    };
+
+    public Cell getCell(int col, int row) {
+        return board[col][row];
     }
 
     // new Player
@@ -41,74 +52,9 @@ TicTacToe {
 
     //on délègue la fonction display à la class View
     public void display() {
-        this.board.display();
+        this.view.display(board);
     }
 
-    //méthode pour le choix de l'adversaire
-    public String choosePlayerType() {
-        String[] playerType = {"humanPlayer", "artificialPlayer"};
-
-        String type = (String) JOptionPane.showInputDialog(
-                null,
-                "Choose your way to play, HumanPlayer or ArtificialPlayer ?",
-                "Choose way to play",
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                playerType,
-                playerType[0]);
-        if (type != null) {
-            JOptionPane.showMessageDialog(
-                    null,
-                    "Your way to play is " + type + " !",
-                    "Choose way to play",
-                    JOptionPane.INFORMATION_MESSAGE);
-        }
-        return type;
-    }
-
-    //méthode pour le choix de l'adversaire
-    public String choosePlayerTypeOpponent() {
-        String[] playerType = {"humanPlayer", "artificialPlayer"};
-
-        String type = (String) JOptionPane.showInputDialog(
-                null,
-                "Choose your opponent, HumanPlayer or ArtificialPlayer ?",
-                "Choose Opponent",
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                playerType,
-                playerType[0]);
-        if (type != null) {
-            JOptionPane.showMessageDialog(
-                    null,
-                    "Your opponent is " + type + " !",
-                    "Choose Opponent",
-                    JOptionPane.INFORMATION_MESSAGE);
-        }
-        return type;
-    }
-
-    //méthode pour le choix du symbol
-    public String chooseSymbol() {
-        String[] symbols = {"X", "O"};
-
-        String optionSymbol = (String) JOptionPane.showInputDialog(
-                null,
-                "Choose your symbol, X or O ?",
-                "Choose Symbol",
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                symbols,
-                symbols[0]);
-        if (optionSymbol != null) {
-            JOptionPane.showMessageDialog(
-                    null,
-                    "Your symbol is " + optionSymbol,
-                    "Choose Symbol",
-                    JOptionPane.INFORMATION_MESSAGE);
-        }
-        return optionSymbol;
-    }
 
     //méthode pour retourner une paire de valeurs pour désigner une case, et s'assurer que les inputs sont valides
     public int[] getMoveFromPlayer() {
@@ -116,10 +62,11 @@ TicTacToe {
         //variable pour stocker les coordonnées
         int col, row;
 
+
         // Tant que l'input est invalide
         do {
-            col = askNumber("column");
-            row = askNumber("row");
+            col = this.interactionUtilisateur.askNumber("column");
+            row = this.interactionUtilisateur.askNumber("row");
 
         } while (!checkNumber(col, row));
         // Fin tant que
@@ -134,39 +81,29 @@ TicTacToe {
         int [] randomResult = new int[2];
         randomResult[0] = secureRandom.nextInt(3);
         randomResult[1] = secureRandom.nextInt(3);
-        menu.displayText("Your opponent has played " + randomResult[0] + " in column and " + " in row " + randomResult[1]);
+        interactionUtilisateur.displayText("Your opponent has played " + randomResult[0] + " in column and " + " in row " + randomResult[1]);
         return  randomResult;
     }
 
-
-    //méthode qui boucle sur choice pour vérifier que l'input est valide
-    private int askNumber(String label) {
-        //String userInput = menu.requestText("Please enter a whole number in "+label+" : ");
-        int choice = -1;
-
-        boolean isInvalid = true;
-        // While user hasn't entered a valid number
-        while (isInvalid) {
-            try {
-                String userInput = menu.requestText("Please enter a whole number in " + label + " : ");
-                choice = Integer.parseInt(userInput);
-                menu.displayText("You have chosen " + choice + " .");
-                if (choice >= 0 && choice <= 2) {
-                    isInvalid = false;
-                } else {
-                    menu.showError("Please enter a number between 0 and 2");
+    public boolean hasEmptyCell() {
+        boolean hasEmpty = false;
+        //vérifier si la grille contient encore une cellule vide
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if (getCell(i, j).isEmpty()) {
+                    hasEmpty = true;
+                    break;
                 }
-
-            } catch (NumberFormatException e) {
-                menu.showError("Please enter a number ! ");
+                if (hasEmpty) break;
             }
         }
-        return choice;
+        return hasEmpty;
     }
 
     // Verifier si l'emplacement est libre
     private boolean checkNumber(int col, int row) {
-        Cell cell = this.board.getCell(col, row);
+
+        Cell cell = board[col][row];
         return cell.isEmpty();
     }
 
@@ -181,11 +118,11 @@ TicTacToe {
     //récupère si l'emplacement est libre et remplace par optionSymbol
     public void setOwner(Player currentPlayer) {
         int [] movePlayer = whoPlayed(currentPlayer);
-        Cell cell = this.board.getCell(movePlayer[0],movePlayer[1]);
+        Cell cell = board[movePlayer[0]][movePlayer[1]];
         if (cell.isEmpty()) {
             cell.setRepresentation(currentPlayer.getRepresentation());
         } else {
-            menu.displayText("This cell is already occupied!");
+            interactionUtilisateur.displayText("This cell is already occupied!");
         }
     }
 
@@ -194,24 +131,24 @@ TicTacToe {
         boolean hasEmpty = true;
 
         //demander le type du player
-        type = choosePlayerType();
+        type = this.interactionUtilisateur.choosePlayerType();
         if (type == null) {
-            menu.displayText("Please choose, Humanplayer or ArtificialPlayer ?");
+            interactionUtilisateur.displayText("Please choose, Humanplayer or ArtificialPlayer ?");
             return;
         } player1.setPlayerType(type);
 
         //demander le type de l'adversaire
-        type = choosePlayerTypeOpponent();
+        type = this.interactionUtilisateur.choosePlayerTypeOpponent();
         if (type == null) {
-            menu.displayText("Please choose your opponent, Humanplayer or ArtificialPlayer ?");
+            interactionUtilisateur.displayText("Please choose your opponent, Humanplayer or ArtificialPlayer ?");
             return;
         } player2.setPlayerType(type);
 
 
         // demander le symbole une seule fois
-        optionSymbol = chooseSymbol();
+        optionSymbol = this.interactionUtilisateur.chooseSymbol();
         if (optionSymbol == null) {
-            menu.displayText("Please choose your symbol, X or O ?");
+            interactionUtilisateur.displayText("Please choose your symbol, X or O ?");
             return;
         } player1.setRepresentation(optionSymbol);
 
@@ -225,15 +162,16 @@ TicTacToe {
 
         Player currentPlayer = player1;
 
+
         while (hasEmpty) {
 
-
             //changement de joueur
-            if(!started || currentPlayer == player1 && started){
+            if((!started) || (currentPlayer == player1)){
                 setOwner(currentPlayer);
                 currentPlayer = player2;
                 started = true;
             } else {
+
                 setOwner(currentPlayer);
                 currentPlayer = player1;
             }
@@ -242,13 +180,13 @@ TicTacToe {
             display();
             if (isOver()) {
                 hasEmpty = false;
-                menu.displayText(currentPlayer.getRepresentation()+" has Won !!");
+                interactionUtilisateur.displayText(currentPlayer.getRepresentation()+" has Won !!");
             } else {
-                hasEmpty = board.hasEmptyCell();
+                hasEmpty = hasEmptyCell();
             }
 
         }
-        menu.displayText("All cells are now filled!");
+        interactionUtilisateur.displayText("All cells are now filled!");
     }
 
     public boolean isOver() {
@@ -260,17 +198,17 @@ TicTacToe {
 //        boolean isFullCol = false;
 
         //je parcours les col
-        for (int col = 0; col < board.size; col++) {
+        for (int col = 0; col < board.length; col++) {
             //je récupère la valeur de la cell (de type cell)
-            Cell cell = this.board.getCell(col, 0);
+            Cell cell = board[col][0];
             //si la cell est vide
             if (!cell.isEmpty()) {
                 //je parcours la ligne
                 int row = 1;
                 //tant que mes deux cases sont identiques
-                while (Objects.equals(this.board.getCell(col, row).getRepresentation(), cell.getRepresentation())) {
+                while (Objects.equals(this.board[col][row].getRepresentation(), cell.getRepresentation())) {
                     //
-                    if (row == board.size - 1) {
+                    if (row == board.length - 1) {
                         return true;
                     }
                     //j'incrémente row
@@ -286,17 +224,17 @@ TicTacToe {
     public boolean checkRow() {
 
         //je parcours les row
-        for (int row = 0; row < board.size; row++) {
+        for (int row = 0; row < board.length; row++) {
             //je récupère la valeur de la cell (de type cell)
-            Cell cell = this.board.getCell(0, row);
+            Cell cell = this.board[0][row];
             //si la cell est vide
             if (!cell.isEmpty()) {
                 //je parcours la ligne
                 int col = 1;
                 //tant que mes deux cases sont identiques
-                while (Objects.equals(this.board.getCell(col, row).getRepresentation(), cell.getRepresentation())) {
+                while (Objects.equals(this.board[col][row].getRepresentation(), cell.getRepresentation())) {
                     //
-                    if (col == board.size - 1) {
+                    if (col == board.length - 1) {
                         return true;
                     }
                     //j'incrémente row
@@ -312,15 +250,15 @@ TicTacToe {
     public boolean checkDiag1() {
 
         //je récupère la valeur de la cell (de type cell)
-        Cell cell = this.board.getCell(0, 0);
+        Cell cell = this.board[0][0];
         //si la cell est vide
         if (!cell.isEmpty()) {
             int col = 0;
             int row = 0;
             //tant que mes deux cases sont identiques
-            while (Objects.equals(this.board.getCell(col, row).getRepresentation(), cell.getRepresentation())) {
+            while (Objects.equals(this.board[col][row].getRepresentation(), cell.getRepresentation())) {
                 //
-                if (col == board.size - 1) {
+                if (col == board.length - 1) {
                     return true;
                 }
                 //j'incrémente col et row
@@ -334,15 +272,15 @@ TicTacToe {
     public boolean checkDiag2() {
 
         //je récupère la valeur de la cell (de type cell)
-        Cell cell = this.board.getCell(0, 0);
+        Cell cell = this.board[0][0];
         //si la cell est vide
         if (!cell.isEmpty()) {
             int col = 0;
             int row = 2;
             //tant que mes deux cases sont identiques
-            while (Objects.equals(this.board.getCell(col, row).getRepresentation(), cell.getRepresentation())) {
+            while (Objects.equals(this.board[col][row].getRepresentation(), cell.getRepresentation())) {
                 //
-                if (col == board.size - 1) {
+                if (col == board.length - 1) {
                     return true;
                 }
                 col++;
