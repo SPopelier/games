@@ -1,11 +1,9 @@
+public class ArtificialPlayer extends Player {
+    private String representation;
+    private String playerType;
 
-public class Player {
-    protected String representation;
-    protected String playerType;
-
-    public Player(String optionSymbol, String type) {
-        this.representation = optionSymbol;
-        this.playerType = type;
+    public ArtificialPlayer(String optionSymbol, String type) {
+        super(optionSymbol, type);
     }
 
     public String getRepresentation() {
