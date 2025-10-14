@@ -47,7 +47,6 @@ public class Game implements GameModel {
         this.col = col;
         this.row = row;
         this.interactionUtilisateur = new InteractionUtilisateur();
-        this.initialiseBoard();
         this.view = new View();
     }
 
@@ -97,8 +96,8 @@ public class Game implements GameModel {
     public int[] getMoveFromArtificialPlayer() {
         final SecureRandom secureRandom = new SecureRandom();
         int [] randomResult = new int[2];
-        randomResult[0] = secureRandom.nextInt(3);
-        randomResult[1] = secureRandom.nextInt(3);
+        randomResult[0] = secureRandom.nextInt(col);
+        randomResult[1] = secureRandom.nextInt(row);
         interactionUtilisateur.displayText("Your opponent has played " + randomResult[0] + " in column and " + " in row " + randomResult[1]);
         return  randomResult;
     }
@@ -120,7 +119,9 @@ public class Game implements GameModel {
 
     // Verifier si l'emplacement est libre
     private boolean checkNumber(int col, int row) {
-
+        if (col < 0 || col >= this.col || row < 0 || row >= this.row) {
+            return false;
+        }
         Cell cell = board[col][row];
         return cell.isEmpty();
     }
@@ -166,6 +167,8 @@ public class Game implements GameModel {
             interactionUtilisateur.displayText("Choosen your game !");
             return;
         }
+
+        this.initialiseBoard();
 
         //demander le type du player
         type = this.interactionUtilisateur.choosePlayerType();
