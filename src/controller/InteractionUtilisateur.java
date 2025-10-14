@@ -20,7 +20,7 @@ public class InteractionUtilisateur {
     public String chooseGame() {
         String[] gameType = {"TicTacToe", "Gomoku", "Puissance4"};
 
-        String game = (String) JOptionPane.showInputDialog (
+        String game = (String) JOptionPane.showInputDialog(
                 null,
                 "Choose TicTacToe or Gomoku or Puissance4 !",
                 "Choose your game",
@@ -29,25 +29,11 @@ public class InteractionUtilisateur {
                 gameType,
                 gameType[0]
         );
-        if (game == "TicTacToe") {
+        if (game != null) { // Vérifie que l'utilisateur n'a pas annulé
             JOptionPane.showMessageDialog(
                     null,
                     "You have chosen " + game + " !",
-                    "TicTacToe",
-                    JOptionPane.INFORMATION_MESSAGE
-            );
-        } else if (game == "Gomoku") {
-            JOptionPane.showMessageDialog(
-                    null,
-                    "You have chosen " + game + " !",
-                    "TicTacToe",
-                    JOptionPane.INFORMATION_MESSAGE
-            );
-        } else {
-            JOptionPane.showMessageDialog(
-                    null,
-                    "You have chosen " + game + " !",
-                    "TicTacToe",
+                    "Game Choice",
                     JOptionPane.INFORMATION_MESSAGE
             );
         }

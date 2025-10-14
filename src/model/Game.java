@@ -2,6 +2,10 @@ package model;
 
 import java.security.SecureRandom;
 import java.util.Objects;
+
+import games.Gomoku;
+import games.Puissance4;
+import games.TicTacToe;
 import view.View;
 import model.Cell;
 import player.Player;
@@ -44,7 +48,6 @@ public class Game implements GameModel {
         this.row = row;
         this.interactionUtilisateur = new InteractionUtilisateur();
         this.initialiseBoard();
-        this.player = new Player(optionSymbol, type);
         this.view = new View();
     }
 
@@ -146,9 +149,22 @@ public class Game implements GameModel {
         boolean hasEmpty = true;
 
         //demander quel jeu
-        game = this.interactionUtilisateur.chooseGame();
-        if (game == null) {
+        this.game = this.interactionUtilisateur.chooseGame();
+        if (this.game == null) {
             interactionUtilisateur.displayText("Please choose your game !");
+        }
+
+        //instancier le bon jeu en fonction du game
+        GameModel gameModel; // variable locale pour gameModel
+        if ("TicTacToe".equals(this.game)) {
+            gameModel = new TicTacToe();
+        } else if ("Gomoku".equals(this.game)) {
+            gameModel = new Gomoku();
+        } else if ("Puissance4".equals(this.game)) {
+            gameModel = new Puissance4();
+        } else {
+            interactionUtilisateur.displayText("Choosen your game !");
+            return;
         }
 
         //demander le type du player
