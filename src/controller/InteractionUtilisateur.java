@@ -16,6 +16,44 @@ public class InteractionUtilisateur {
         JOptionPane.showMessageDialog(null, message);
     }
 
+    //méthode pour choisir le game
+    public String chooseGame() {
+        String[] gameType = {"TicTacToe", "Gomoku", "Puissance4"};
+
+        String game = (String) JOptionPane.showInputDialog (
+                null,
+                "Choose TicTacToe or Gomoku or Puissance4 !",
+                "Choose your game",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                gameType,
+                gameType[0]
+        );
+        if (game == "TicTacToe") {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "You have chosen " + game + " !",
+                    "TicTacToe",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+        } else if (game == "Gomoku") {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "You have chosen " + game + " !",
+                    "TicTacToe",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+        } else {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "You have chosen " + game + " !",
+                    "TicTacToe",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+        }
+        return game;
+    }
+
     //méthode pour le choix de l'adversaire
     public String choosePlayerType() {
         String[] playerType = {"humanPlayer", "artificialPlayer"};

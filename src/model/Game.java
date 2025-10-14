@@ -29,6 +29,9 @@ public class Game implements GameModel {
     //stockage de la variabe type
     String type;
 
+    //stockage de la variable game
+    String game;
+
     /////////////////////////INITIALISATION/////////////////////////
 
     //stockage du boolean started
@@ -141,6 +144,12 @@ public class Game implements GameModel {
     public void play() {
 
         boolean hasEmpty = true;
+
+        //demander quel jeu
+        game = this.interactionUtilisateur.chooseGame();
+        if (game == null) {
+            interactionUtilisateur.displayText("Please choose your game !");
+        }
 
         //demander le type du player
         type = this.interactionUtilisateur.choosePlayerType();
