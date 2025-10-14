@@ -1,3 +1,5 @@
+package model;
+
 public class Cell {
 
     //Chaque cell commence vide puis X ou O quand player play

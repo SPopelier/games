@@ -1,3 +1,5 @@
+package controller;
+
 import javax.swing.*; //importe les classes du package swing, y compris JOptionPane
 
 public class InteractionUtilisateur {
@@ -81,7 +83,7 @@ public class InteractionUtilisateur {
     }
 
     //méthode qui boucle sur choice pour vérifier que l'input est valide
-    protected int askNumber(String label) {
+    public int askNumber(String label) {
         //String userInput = menu.requestText("Please enter a whole number in "+label+" : ");
         int choice = -1;
 

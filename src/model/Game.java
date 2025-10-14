@@ -1,8 +1,18 @@
+package model;
+
 import java.security.SecureRandom;
 import java.util.Objects;
+import view.View;
+import model.Cell;
+import player.Player;
+import controller.InteractionUtilisateur;
 
+public class Game implements GameModel {
 
-public class TicTacToe {
+    /////////////////////////ATTRIBUTS/////////////////////////
+    protected  int col;
+    protected int row;
+    protected Cell[][] board;
 
     //instance de la Class Menu pour gérer les interactions
     private final InteractionUtilisateur interactionUtilisateur;
@@ -13,48 +23,50 @@ public class TicTacToe {
     //instance de la class View
     public View view;
 
-    public Cell[][] board;
-
     //stockage de la variable optionSybmol
     String optionSymbol;
 
     //stockage de la variabe type
     String type;
 
+    /////////////////////////INITIALISATION/////////////////////////
+
     //stockage du boolean started
     public boolean started = false;
 
-
-    //on construit le board(Menu, GameBoard)
-    public TicTacToe() {
+    /////////////////////////CONSTRUCTEUR/////////////////////////
+    //new board(Menu, GameBoard)
+    public Game(int col, int row) {
+        this.col = col;
+        this.row = row;
         this.interactionUtilisateur = new InteractionUtilisateur();
         this.initialiseBoard();
         this.player = new Player(optionSymbol, type);
         this.view = new View();
     }
 
-    private void initialiseBoard() {
-        board =  new Cell[3][3];
-        for(int i = 0; i < 3; i++) {
-            for(int j = 0; j < 3; j++) {
-                board[i][j] = new Cell();
-            }
-        }
-    };
-
-    public Cell getCell(int col, int row) {
-        return board[col][row];
-    }
-
     // new Player
-    Player player1 = new Player(optionSymbol, "humanPlayer");
+    Player player1 = new Player(optionSymbol, type);
     Player player2 = new Player(optionSymbol, type);
 
+    ////////////////////////AUTO RÉFÉRENCE/////////////////////////
+
     //on délègue la fonction display à la class View
+    @Override
     public void display() {
         this.view.display(board);
     }
 
+    ////////////////////////MÉTHODES/////////////////////////
+    @Override
+    public void initialiseBoard() {
+        board =  new Cell[col][row];
+        for(int i = 0; i < col; i++) {
+            for(int j = 0; j < row; j++) {
+                board[i][j] = new Cell();
+            }
+        }
+    };
 
     //méthode pour retourner une paire de valeurs pour désigner une case, et s'assurer que les inputs sont valides
     public int[] getMoveFromPlayer() {
@@ -108,11 +120,11 @@ public class TicTacToe {
     }
 
     public int[] whoPlayed(Player currentPlayer){
-     if (currentPlayer.getPlayerType().equals("humanPlayer")){
-         return getMoveFromPlayer();
-     } else {
-         return getMoveFromArtificialPlayer();
-     }
+        if (currentPlayer.getPlayerType().equals("humanPlayer")){
+            return getMoveFromPlayer();
+        } else {
+            return getMoveFromArtificialPlayer();
+        }
     }
 
     //récupère si l'emplacement est libre et remplace par optionSymbol
@@ -288,5 +300,16 @@ public class TicTacToe {
             }
         }
         return false;
+    }
+
+
+    ////////////////////////GETTER/SETTER/////////////////////////
+    public Cell getCell(int col, int row) {
+        return board[col][row];
+    }
+
+    @Override
+    public Cell[][] getBoard() {
+        return board;
     }
 }
