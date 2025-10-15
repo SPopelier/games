@@ -2,7 +2,9 @@ package controller;
 
 import javax.swing.*; //importe les classes du package swing, y compris JOptionPane
 
-public class InteractionUtilisateur {
+public class
+
+InteractionUtilisateur {
 
     public void showError(String message) {
         JOptionPane.showMessageDialog(null,message,"Error",JOptionPane.ERROR_MESSAGE);

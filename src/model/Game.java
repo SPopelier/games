@@ -7,7 +7,6 @@ import games.Gomoku;
 import games.Puissance4;
 import games.TicTacToe;
 import view.View;
-import model.Cell;
 import player.Player;
 import controller.InteractionUtilisateur;
 
@@ -20,9 +19,6 @@ public class Game implements GameModel {
 
     //instance de la Class Menu pour gérer les interactions
     private final InteractionUtilisateur interactionUtilisateur;
-
-    //instance de la Class Player pour gérer currentPlayer
-    public Player player;
 
     //instance de la class View
     public View view;
@@ -71,7 +67,7 @@ public class Game implements GameModel {
                 board[i][j] = new Cell();
             }
         }
-    };
+    }
 
     //méthode pour retourner une paire de valeurs pour désigner une case, et s'assurer que les inputs sont valides
     public int[] getMoveFromPlayer() {
@@ -168,7 +164,9 @@ public class Game implements GameModel {
             return;
         }
 
-        this.initialiseBoard();
+        gameModel.initialiseBoard();
+        gameModel.display();
+        this.board = gameModel.getBoard();
 
         //demander le type du player
         type = this.interactionUtilisateur.choosePlayerType();
