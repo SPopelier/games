@@ -6,16 +6,18 @@ import model.GameModel;
 
 public class Puissance4 implements GameModel {
 
-    /////////////////////////ATTRIBUTS/////////////////////////
+    /// //////////////////////ATTRIBUTS/////////////////////////
     private final Game game;
-    public final int victory = 4;
+    public final int victory;
 
-    /////////////////////////CONSTRUCTEUR/////////////////////////
+    /// //////////////////////CONSTRUCTEUR/////////////////////////
     public Puissance4() throws Exception {
-        game = new Game(7, 6);
+        game = new Game(7, 7);
+        this.victory = 4;
     }
 
-    ////////////////////////MÉTHODES/////////////////////////
+    /// /////////////////////MÉTHODES/////////////////////////
+    ///
     @Override
     public void initialiseBoard() {
         game.initialiseBoard();
@@ -27,16 +29,16 @@ public class Puissance4 implements GameModel {
     }
 
 
-    ////////////////////////GETTER/SETTER/////////////////////////
+    /// /////////////////////GETTER/SETTER/////////////////////////
     public Cell[][] getBoard() {
-
         return game.getBoard();
     }
+
     public int[] getBoardSize() {
-        return new int[]{7, 6};
+        return new int[]{7, 7};
     }
 
     public int getVictory() {
-        return 0;
+        return victory;
     }
 }

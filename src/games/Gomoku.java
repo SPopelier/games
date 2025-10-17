@@ -8,11 +8,12 @@ public class Gomoku implements GameModel {
 
     /////////////////////////ATTRIBUTS/////////////////////////
     private final Game game;
-    public final int victory = 5;
+    public final int victory;
 
     /////////////////////////CONSTRUCTEUR/////////////////////////
     public Gomoku() throws Exception {
         game = new Game(15, 15);
+        this.victory = 5;
     }
 
     ////////////////////////MÉTHODES/////////////////////////
@@ -35,6 +36,6 @@ public class Gomoku implements GameModel {
     }
 
     public int getVictory() {
-        return 0;
+        return victory;
     }
 }

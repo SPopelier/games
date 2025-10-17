@@ -125,10 +125,18 @@ public class Game implements GameModel {
     }
 
     public int[] whoPlayed(Player currentPlayer) {
-        if (currentPlayer.getPlayerType().equals("humanPlayer")) {
-            return getMoveFromPlayer();
+        if (this.game.equals("Puissance4")) {
+            if (currentPlayer.getPlayerType().equals("humanPlayer")) {
+                return fallingToken(getMoveFromPlayer()[0]);
+            } else {
+                return fallingToken(getMoveFromArtificialPlayer()[0]);
+            }
         } else {
-            return getMoveFromArtificialPlayer();
+            if (currentPlayer.getPlayerType().equals("humanPlayer")) {
+                return getMoveFromPlayer();
+            } else {
+                return getMoveFromArtificialPlayer();
+            }
         }
     }
 
@@ -236,22 +244,20 @@ public class Game implements GameModel {
     }
 
     public boolean checkVictory(Player currentPlayer) {
-        int size = board.length;
-        int victory = this.gameInstance.getVictory();
-        if (checkCol(size, victory, currentPlayer) || checkRow(size, victory, currentPlayer) || checkDiag(size, victory, currentPlayer)) {
+        if (checkCol(currentPlayer) || checkRow(currentPlayer) || checkDiag(currentPlayer)) {
             interactionUtilisateur.displayText(currentPlayer.getRepresentation() + " has Won !!!!");
             return true;
         }
         return false;
     }
 
-    public boolean checkCol(int size, int victory, Player currentPlayer) {
+    public boolean checkCol(Player currentPlayer) {
         int countVictory = 0;
         boolean result = false;
         int row = 0;
-        while (row != size) {
+        while (row != board.length) {
             if (!result) {
-                for (int col = 0; col < size; col++) {
+                for (int col = 0; col < board.length; col++) {
                     //je récupère la valeur de la cell (de type cell)
                     Cell cell = board[row][col];
                     //si la cell est vide
@@ -259,7 +265,7 @@ public class Game implements GameModel {
                         //je parcours la ligne
                         if (cell.getRepresentation().equals(currentPlayer.getRepresentation())) {
                             countVictory++;
-                            if (countVictory == victory) {
+                            if (countVictory == this.gameInstance.getVictory()) {
                                 result = true;
                             }
                         }
@@ -274,13 +280,13 @@ public class Game implements GameModel {
         return result;
     }
 
-    public boolean checkRow(int size, int victory, Player currentPlayer) {
+    public boolean checkRow(Player currentPlayer) {
         int countVictory = 0;
         boolean result = false;
         int col = 0;
-        while (col != size) {
+        while (col != board.length) {
             if (!result) {
-                for (int i = 0; i < size; i++) {
+                for (int i = 0; i < board.length; i++) {
                     //je récupère la valeur de la cell (de type cell)
                     Cell cell = board[i][col];
                     //si la cell est vide
@@ -288,7 +294,7 @@ public class Game implements GameModel {
                         //je parcours la ligne
                         if (cell.getRepresentation().equals(currentPlayer.getRepresentation())) {
                             countVictory++;
-                            if (countVictory == victory) {
+                            if (countVictory == this.gameInstance.getVictory()) {
                                 result = true;
                             }
                         }
@@ -303,21 +309,21 @@ public class Game implements GameModel {
         return result;
     }
 
-    public boolean checkDiag(int size, int victory, Player currentPlayer) {
-        return checkDiagLeftRight(size, victory, currentPlayer) || checkDiagRightLeft(size, victory, currentPlayer);
+    public boolean checkDiag(Player currentPlayer) {
+        return checkDiagLeftRight(currentPlayer) || checkDiagRightLeft(currentPlayer);
     }
 
-    public boolean checkDiagLeftRight(int size, int victory, Player currentPlayer) {
+    public boolean checkDiagLeftRight(Player currentPlayer) {
         int countVictory = 0;
         boolean result = false;
         int verification = 0;
-        while (verification != size) {
+        while (verification != board.length) {
             if (!result) {
-                for (int i = 0; i < size; i++) {
+                for (int i = 0; i < board.length; i++) {
                     Cell cell = board[i][i];
                     if (cell.getRepresentation().equals(currentPlayer.getRepresentation())) {
                         countVictory++;
-                        if (countVictory == victory) {
+                        if (countVictory == this.gameInstance.getVictory()) {
                             result = true;
                         }
                     } else {
@@ -331,18 +337,18 @@ public class Game implements GameModel {
         return result;
     }
 
-    public boolean checkDiagRightLeft(int size, int victory, Player currentPlayer) {
+    public boolean checkDiagRightLeft(Player currentPlayer) {
         int countVictory = 0;
         boolean result = false;
         int verification = 0;
-        int colIndex = size - 1;
-        while (verification != size) {
+        int colIndex = board.length - 1;
+        while (verification != board.length) {
             if (!result) {
-                for (int rowIndex = 0; rowIndex < size; rowIndex++) {
+                for (int rowIndex = 0; rowIndex < board.length; rowIndex++) {
                     Cell cell = board[colIndex][rowIndex];
                     if (cell.getRepresentation().equals(currentPlayer.getRepresentation())) {
                         countVictory++;
-                        if (countVictory == victory) {
+                        if (countVictory == this.gameInstance.getVictory()) {
                             result = true;
                         }
                     } else {
@@ -352,8 +358,23 @@ public class Game implements GameModel {
                 }
             }
             countVictory = 0;
-            colIndex = size - 1;
+            colIndex = board.length - 1;
             verification++;
+        }
+        return result;
+    }
+
+    public int[] fallingToken(int colUser) {
+        int[] result = new int[2];
+        boolean stopVerification = false;
+        for (int rowIndex = (board.length - 1); rowIndex > 0; rowIndex--) {
+            if (!stopVerification) {
+                Cell cell = board[rowIndex][colUser];
+                if (cell.isEmpty()) {
+                    stopVerification = true;
+                    result = new int[]{colUser, rowIndex};
+                }
+            }
         }
         return result;
     }
