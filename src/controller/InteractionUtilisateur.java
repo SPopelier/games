@@ -109,8 +109,7 @@ InteractionUtilisateur {
     }
 
     //méthode qui boucle sur choice pour vérifier que l'input est valide
-    public int askNumber(String label) {
-        //String userInput = menu.requestText("Please enter a whole number in "+label+" : ");
+    public int askNumber(String label, int max) {
         int choice = -1;
 
         boolean isInvalid = true;
@@ -120,10 +119,10 @@ InteractionUtilisateur {
                 String userInput = requestText("Please enter a whole number in " + label + " : ");
                 choice = Integer.parseInt(userInput);
                 displayText("You have chosen " + choice + " .");
-                if (choice >= 0 && choice <= 2) {
+                if (choice >= 0 && choice <= max) {
                     isInvalid = false;
                 } else {
-                    showError("Please enter a number between 0 and 2");
+                    showError("Please enter a number between 0 and " +max);
                 }
 
             } catch (NumberFormatException e) {
@@ -132,7 +131,4 @@ InteractionUtilisateur {
         }
         return choice;
     }
-
-
-
 }

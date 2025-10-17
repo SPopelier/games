@@ -8,9 +8,10 @@ public class Puissance4 implements GameModel {
 
     /////////////////////////ATTRIBUTS/////////////////////////
     private final Game game;
+    public final int victory = 4;
 
     /////////////////////////CONSTRUCTEUR/////////////////////////
-    public Puissance4() {
+    public Puissance4() throws Exception {
         game = new Game(7, 6);
     }
 
@@ -25,8 +26,17 @@ public class Puissance4 implements GameModel {
         game.display();
     }
 
+
     ////////////////////////GETTER/SETTER/////////////////////////
     public Cell[][] getBoard() {
+
         return game.getBoard();
+    }
+    public int[] getBoardSize() {
+        return new int[]{7, 6};
+    }
+
+    public int getVictory() {
+        return 0;
     }
 }

@@ -9,6 +9,8 @@ public class Cell {
     public boolean isEmpty() {
         return this.representation.equals(" "); }
 
+    public Cell() {};
+
     //pour mettre X ou O du joueur dans la cell
     public void setRepresentation(String representation) {
         this.representation = representation;

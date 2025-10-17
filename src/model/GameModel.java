@@ -6,6 +6,10 @@ public interface GameModel {
     void initialiseBoard();
     void display();
 
+
     ////////////////////////GETTER/SETTER/////////////////////////
     Cell[][] getBoard();
+    int[] getBoardSize();
+    int getVictory();
+
 }
