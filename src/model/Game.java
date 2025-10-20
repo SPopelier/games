@@ -5,6 +5,7 @@ import java.security.SecureRandom;
 import games.Gomoku;
 import games.Puissance4;
 import games.TicTacToe;
+import player.ArtificialPlayer;
 import view.View;
 import player.Player;
 import controller.InteractionUtilisateur;
@@ -155,6 +156,7 @@ public class Game implements GameModel {
         // new Player
         Player player1 = new Player(optionSymbol, type);
         Player player2 = new Player(optionSymbol, type);
+
 
         //demander quel jeu
         this.game = this.interactionUtilisateur.chooseGame();
